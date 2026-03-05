@@ -3,7 +3,6 @@
  * Handles: scroll reveal, header scroll, FAQ accordion,
  * hero word animation, mobile menu, smooth scroll.
  */
-import './style.css';
 
 /* ================================================================
    SCROLL REVEAL
