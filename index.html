@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
@@ -16,16 +16,14 @@
     <div class="page-container flex items-center justify-between h-16">
       <!-- Logo -->
       <a href="#" class="flex items-center gap-2 shrink-0" aria-label="AutoML Home">
-        <svg width="28" height="28" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <rect width="32" height="32" rx="8" fill="#5e6ad2"/>
-          <path d="M8 22L16 10l8 12" stroke="#fff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
-          <circle cx="16" cy="18" r="2.5" fill="#fff"/>
-        </svg>
+        <div class="w-7 h-7 rounded-md bg-[#5e6ad2] flex items-center justify-center">
+          <svg width="16" height="16" viewBox="1 0 22 24" fill="none" stroke="#fff" stroke-width="2.5" stroke-linecap="round"><path d="M13 2L3 14h7l-1 8 10-12h-7l1-8z"></path></svg>
+        </div>
         <span class="text-[15px] font-semibold tracking-[-0.02em]">AutoML</span>
       </a>
 
       <!-- Desktop Nav -->
-      <nav class="hidden lg:flex items-center gap-1">
+      <nav class="hidden lg:flex items-center gap-1 flex-1 justify-end">
         <a href="#features" class="link-dimmed text-[13px] px-3 py-1.5 rounded-md">Features</a>
         <a href="#how-it-works" class="link-dimmed text-[13px] px-3 py-1.5 rounded-md">How It Works</a>
         <a href="#algorithms" class="link-dimmed text-[13px] px-3 py-1.5 rounded-md">Algorithms</a>
@@ -37,7 +35,7 @@
       </nav>
 
       <!-- CTA -->
-      <div class="hidden lg:flex items-center gap-3">
+      <div class="hidden lg:flex items-center gap-3 ml-6">
         <a href="#get-started" class="btn btn-primary text-[13px] h-8 px-3 rounded-md">Get Started</a>
       </div>
 
@@ -62,31 +60,30 @@
   </div>
 
   <!-- ═══════════════ HERO ═══════════════ -->
-  <section class="relative pt-40 pb-24">
-    <div class="page-container text-center">
-      <p class="text-mini-sz text-tertiary mb-4 tracking-wide uppercase reveal">Open-Source &middot; No-Code &middot; ML Framework</p>
+  <section class="hero-section">
+    <div class="page-container">
+      <div class="hero-content-wrapper">
+        <p class="hero-eyebrow reveal">Open-Source &middot; No-Code &middot; ML Framework</p>
 
-      <h1 id="hero-heading" class="title-9 text-primary text-balance max-w-4xl mx-auto mb-6">
-        From Raw CSV to Production ML Model
-      </h1>
+        <h1 id="hero-heading" class="hero-title reveal">
+          From Raw CSV to Production ML Model
+        </h1>
 
-      <p class="text-large-sz text-secondary max-w-2xl mx-auto mb-10 reveal reveal-d1">
-        Upload a dataset, get a production-ready model. AutoML handles the entire pipeline&nbsp;&mdash; cleaning, feature engineering, training, and model selection&nbsp;&mdash; with generalization-first scoring.
-      </p>
-
-      <div class="flex flex-wrap items-center justify-center gap-3 mb-20 reveal reveal-d2">
-        <a href="#get-started" class="btn btn-invert btn-lg">
-          Get Started
-          <svg width="16" height="16" viewBox="0 0 16 16" fill="none" class="ml-0.5"><path d="M6 3l5 5-5 5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
-        </a>
-        <a href="https://github.com/your-repo/automl" target="_blank" rel="noopener" class="btn btn-secondary btn-lg">
-          <svg class="w-4 h-4" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg>
-          View on GitHub
-        </a>
+        <div class="hero-sub-row reveal reveal-d1">
+          <p class="hero-subtitle">
+            Upload a dataset, get a production-ready model. AutoML handles the entire pipeline&nbsp;&mdash; cleaning, feature engineering, training, and model selection.
+          </p>
+          <a href="https://github.com/your-repo/automl" target="_blank" rel="noopener" class="hero-github-link">
+            Download on GitHub →
+          </a>
+        </div>
       </div>
+    </div>
 
-      <!-- Interactive Demo Panel -->
-      <div id="demo-app" class="panel max-w-5xl mx-auto reveal reveal-d3 overflow-hidden" style="min-height:520px">
+    <!-- Interactive Demo Panel -->
+    <div class="page-container">
+      <div class="dashboard-wrapper reveal reveal-d2">
+        <div id="demo-app" class="panel dashboard-preview overflow-hidden" style="min-height:520px">
         <div class="grain grain-subtle"></div>
         <div class="demo-shell relative z-[4]">
           <!-- Sidebar -->
@@ -306,7 +303,9 @@
           </main>
         </div>
       </div>
+      </div>
     </div>
+    <div class="hero-bottom-fade"></div>
   </section>
 
   <!-- ═══════════════ LOGO / TRUST BAR ═══════════════ -->

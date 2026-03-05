@@ -250,6 +250,130 @@
   }
   .link-accent:hover { color: #fff; }
 
+  /* ── HERO SECTION ────────────────────────────────── */
+  .hero-section {
+    position: relative;
+    padding-top: 120px;
+    padding-bottom: 140px;
+    overflow: hidden;
+  }
+
+  .hero-content-wrapper {
+    max-width: 1280px;
+  }
+
+  .hero-eyebrow {
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--color-text-tertiary);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    margin-bottom: 24px;
+    margin-top: 0;
+  }
+
+  .hero-title {
+    font-size: clamp(30px, 5vw, 72px);
+    font-weight: 300;
+    line-height: 1.05;
+    letter-spacing: -0.03em;
+    color: #ffffff;
+    max-width: 900px;
+    margin: 0 0 24px 0;
+  }
+
+  .hero-sub-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 40px;
+    margin-top: 24px;
+  }
+
+  .hero-subtitle {
+    font-size: 15px;
+    line-height: 1.6;
+    color: rgba(255, 255, 255, 0.65);
+    max-width: 600px;
+    margin: 0;
+  }
+
+  .hero-github-link {
+    font-size: 16px;
+    color: rgba(255, 255, 255, 0.8);
+    transition: opacity 0.16s;
+    white-space: nowrap;
+    flex-shrink: 0;
+    padding-top: 4px;
+  }
+  .hero-github-link:hover {
+    opacity: 1;
+    color: #ffffff;
+  }
+
+  .dashboard-wrapper {
+    margin-top: 100px;
+    position: relative;
+  }
+
+  .dashboard-preview {
+    width: 100%;
+    transform: perspective(1800px) rotateX(4deg);
+    box-shadow:
+      0 40px 80px rgba(0, 0, 0, 0.4),
+      0 80px 160px rgba(0, 0, 0, 0.3);
+    border-radius: var(--radius-16);
+  }
+
+  .hero-bottom-fade {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 200px;
+    background: linear-gradient(to bottom, transparent, #0b0f14);
+    pointer-events: none;
+    z-index: 2;
+  }
+
+  @media (max-width: 1024px) {
+    .hero-section {
+      padding-top: 100px;
+      padding-bottom: 100px;
+    }
+    .hero-title {
+      font-size: clamp(40px, 5vw, 64px);
+    }
+    .hero-sub-row {
+      flex-direction: column;
+      gap: 20px;
+    }
+    .dashboard-wrapper {
+      margin-top: 72px;
+    }
+  }
+  @media (max-width: 640px) {
+    .hero-section {
+      padding-top: 80px;
+      padding-bottom: 60px;
+    }
+    .hero-title {
+      font-size: 36px;
+    }
+    .hero-subtitle {
+      font-size: 16px;
+    }
+    .hero-github-link {
+      font-size: 14px;
+    }
+    .dashboard-wrapper {
+      margin-top: 48px;
+    }
+    .dashboard-preview {
+      transform: none;
+    }
+  }
+
   /* ── SCROLL REVEAL ──────────────────────────────── */
   .reveal {
     opacity: 0;

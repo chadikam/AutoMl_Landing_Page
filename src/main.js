@@ -67,15 +67,19 @@ function initHeroAnimation() {
   const heading = document.getElementById('hero-heading');
   if (!heading) return;
 
-  const text = heading.textContent.trim();
-  const words = text.split(/\s+/);
-
-  heading.innerHTML = words
-    .map(
-      (word, i) =>
-        `<span class="hero-word" style="animation-delay:${0.12 + i * 0.07}s">${word}</span>`
-    )
-    .join(' ');
+  // Preserve <br> tags by splitting on them first
+  const lines = heading.innerHTML.split(/<br\s*\/?>/i);
+  
+  heading.innerHTML = lines.map((line, lineIdx) => {
+    const words = line.trim().split(/\s+/).filter(Boolean);
+    const offset = lineIdx * 4; // word offset for delay
+    return words
+      .map(
+        (word, i) =>
+          `<span class="hero-word" style="animation-delay:${0.12 + (offset + i) * 0.07}s">${word}</span>`
+      )
+      .join(' ');
+  }).join('<br/>');
 }
 
 /* ================================================================
