@@ -80,11 +80,9 @@ export default function FeaturesSection() {
   const [activeStep, setActiveStep] = useState(-1);
   const [started, setStarted] = useState(false);
 
-  // Trigger animation when section scrolls into view
   useEffect(() => {
     const el = timelineRef.current;
     if (!el) return;
-
     const observer = new IntersectionObserver(
       ([entry]) => {
         if (entry.isIntersecting && !started) {
@@ -94,31 +92,22 @@ export default function FeaturesSection() {
       },
       { threshold: 0.3 }
     );
-
     observer.observe(el);
     return () => observer.disconnect();
   }, [started]);
 
-  // Step through each item sequentially
   useEffect(() => {
     if (!started) return;
-
     let step = 0;
     setActiveStep(0);
-
     const interval = setInterval(() => {
       step += 1;
-      if (step >= steps.length) {
-        clearInterval(interval);
-        return;
-      }
+      if (step >= steps.length) { clearInterval(interval); return; }
       setActiveStep(step);
     }, 700);
-
     return () => clearInterval(interval);
   }, [started]);
 
-  // Progress bar fill percentage (0% at first step, 100% at last)
   const progressPct = activeStep <= 0 ? 0 : (activeStep / (steps.length - 1)) * 100;
 
   return (
@@ -134,44 +123,19 @@ export default function FeaturesSection() {
           </p>
         </div>
 
-        {/* Timeline11 Replica */}
         <div className="tl11" ref={timelineRef}>
-          {/* Animated progress line */}
           <div className="tl11-line" aria-hidden="true">
-            <div
-              className="tl11-line-fill"
-              style={{ width: `${progressPct}%` }}
-            />
+            <div className="tl11-line-fill" style={{ width: `${progressPct}%` }} />
           </div>
-
-          {/* Steps grid */}
           <div className="tl11-grid">
             {steps.map((s, i) => {
               const isActive = i <= activeStep;
               const isCurrent = i === activeStep;
-
               return (
-                <div
-                  key={s.num}
-                  className={`tl11-item${isActive ? ' tl11-item--active' : ''}${isCurrent ? ' tl11-item--current' : ''}`}
-                >
-                  {/* Icon node */}
+                <div key={s.num} className={`tl11-item${isActive ? ' tl11-item--active' : ''}${isCurrent ? ' tl11-item--current' : ''}`}>
                   <div className="tl11-node">
-                    <svg
-                      width="20"
-                      height="20"
-                      viewBox="0 0 24 24"
-                      fill="none"
-                      stroke="currentColor"
-                      strokeWidth="2"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                    >
-                      {s.icon}
-                    </svg>
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">{s.icon}</svg>
                   </div>
-
-                  {/* Content */}
                   <div className="tl11-content">
                     <span className="tl11-label">Step {s.num}</span>
                     <div className="tl11-sep" />

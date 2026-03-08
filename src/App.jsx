@@ -5,7 +5,7 @@ import TechCarousel from './components/TechCarousel';
 import TaglineSection from './sections/TaglineSection';
 import StatsSection from './sections/StatsSection';
 import FeaturesSection from './sections/FeaturesSection';
-import HowItWorksSection from './sections/HowItWorksSection';
+import ScrollytellingSection from './sections/ScrollytellingSection';
 import AlgorithmsSection from './sections/AlgorithmsSection';
 import FAQSection from './sections/FAQSection';
 import CTASection from './sections/CTASection';
@@ -26,7 +26,7 @@ export default function App() {
       <div className="section-sep" />
       <FeaturesSection />
       <div className="section-sep" />
-      <HowItWorksSection />
+      <ScrollytellingSection />
       <div className="section-sep" />
       <AlgorithmsSection />
       <div className="section-sep" />
