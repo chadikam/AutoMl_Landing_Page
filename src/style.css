@@ -556,6 +556,24 @@
     overflow: hidden;
   }
 
+  /* page-container becomes a flex column so header stacks above layout */
+  .st-section > .page-container {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    gap: 36px;
+  }
+
+  /* Compact header above the two-column grid */
+  .st-header {
+    text-align: center;
+  }
+  .st-header-title {
+    font-size: 28px;
+    font-weight: var(--fw-semibold);
+    line-height: 1.2;
+  }
+
   /* Two-column grid: text LEFT, visual RIGHT */
   .st-layout {
     display: grid;

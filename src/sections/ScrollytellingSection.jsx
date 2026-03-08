@@ -406,7 +406,8 @@ export default function ScrollytellingSection() {
 
   return (
     <section className="st-section" ref={sectionRef}>
-      <div className="page-container st-layout">
+      <div className="page-container">
+        <div className="st-layout">
 
         {/* -- LEFT: scrolling step text -- */}
         <div className="st-text-col">
@@ -463,7 +464,8 @@ export default function ScrollytellingSection() {
           </div>
         </div>
 
-      </div>
+        </div>{/* st-layout */}
+      </div>{/* page-container */}
     </section>
   );
 }
