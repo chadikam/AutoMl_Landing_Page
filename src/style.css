@@ -942,6 +942,24 @@
   }
 
   /* ── FAQ ─────────────────────────────────────────── */
+  .faq-layout {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 60px;
+    align-items: start;
+  }
+
+  .faq-header {
+    position: sticky;
+    top: 120px;
+    margin-top: 60px;
+  }
+
+  .faq-items {
+    display: flex;
+    flex-direction: column;
+  }
+
   .faq-answer {
     max-height: 0;
     overflow: hidden;
@@ -953,6 +971,17 @@
   }
   .faq-item.open .faq-chevron { transform: rotate(180deg); }
   .faq-chevron { transition: transform 0.3s; }
+
+  @media (max-width: 960px) {
+    .faq-layout {
+      grid-template-columns: 1fr;
+      gap: 40px;
+    }
+    .faq-header {
+      position: relative;
+      top: auto;
+    }
+  }
 
   /* ── INGREDIENT PILLS ───────────────────────────── */
   .ingredient {

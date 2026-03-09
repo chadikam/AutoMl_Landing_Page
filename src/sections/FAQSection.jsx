@@ -22,10 +22,6 @@ const faqs = [
     q: 'Can it handle messy, real-world datasets?',
     a: 'Absolutely. AutoML is designed for messy data — heavy missing values, mixed types, outliers, duplicates, class imbalance, typos in categoricals. The adaptive preprocessing pipeline handles edge cases that would break most AutoML tools.',
   },
-  {
-    q: 'Can I package it as a desktop app?',
-    a: 'Yes. AutoML includes a PyInstaller build pipeline that packages the entire Flask backend and React frontend into a single executable — one-click launch with no Python installation required on the target machine.',
-  },
 ];
 
 export default function FAQSection() {
@@ -37,22 +33,29 @@ export default function FAQSection() {
   }, []);
 
   return (
-    <section id="faq" className="py-32" ref={ref}>
-      <div className="page-container max-w-3xl mx-auto">
-        <h2 className="title-6 text-primary text-center mb-14 reveal">Frequently Asked Questions</h2>
+    <section id="faq" className="py-20" ref={ref}>
+      <div className="page-container">
+        <div className="faq-layout reveal">
+          {/* Left: Title & Subtitle */}
+          <div className="faq-header">
+            <h2 className="title-6 text-primary mb-3">Frequently Asked Questions</h2>
+            <p className="text-small-sz text-tertiary">Everything you need to know about AutoML's capabilities and setup.</p>
+          </div>
 
-        <div className="space-y-0 reveal reveal-d1">
-          {faqs.map((faq, i) => (
-            <div key={i} className={`faq-item border-b border-[var(--color-border-primary)]${openIndex === i ? ' open' : ''}`}>
-              <button className="faq-trigger w-full flex items-center justify-between py-5 text-left" onClick={() => toggle(i)}>
-                <span className="title-3 text-primary pr-4">{faq.q}</span>
-                <svg className="faq-chevron shrink-0 text-tertiary" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round"><polyline points="6 9 12 15 18 9"/></svg>
-              </button>
-              <div className="faq-answer">
-                <p className="text-regular-sz text-secondary pb-1">{faq.a}</p>
+          {/* Right: FAQ Items */}
+          <div className="faq-items reveal-d1">
+            {faqs.map((faq, i) => (
+              <div key={i} className={`faq-item border-b border-[var(--color-border-primary)]${openIndex === i ? ' open' : ''}`}>
+                <button className="faq-trigger flex items-center justify-between py-4 text-left" onClick={() => toggle(i)}>
+                  <span className="text-large-sz font-medium text-primary pr-4">{faq.q}</span>
+                  <svg className="faq-chevron shrink-0 text-tertiary" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round"><polyline points="6 9 12 15 18 9"/></svg>
+                </button>
+                <div className="faq-answer">
+                  <p className="text-small-sz text-secondary pb-1">{faq.a}</p>
+                </div>
               </div>
-            </div>
-          ))}
+            ))}
+          </div>
         </div>
       </div>
     </section>
