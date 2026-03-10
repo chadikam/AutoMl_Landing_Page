@@ -548,6 +548,47 @@
 
   /* ── SCROLL-HIJACKING SCROLLYTELLING ──────────── */
 
+  /* ── HOW IT WORKS (static alternating) ──────── */
+  .hiw-section {
+    padding: 100px 0;
+  }
+  .hiw-steps {
+    display: flex;
+    flex-direction: column;
+    gap: 100px;
+  }
+  .hiw-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 80px;
+    align-items: center;
+  }
+  .hiw-row--reversed .hiw-text { order: 2; }
+  .hiw-row--reversed .hiw-visual { order: 1; }
+
+  .hiw-text {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+  }
+  .hiw-visual-frame {
+    width: 100%;
+    aspect-ratio: 4 / 3;
+    border-radius: var(--radius-16);
+    overflow: hidden;
+    background: var(--color-bg-panel);
+    border: 1px solid var(--color-border-translucent-strong);
+  }
+
+  @media (max-width: 768px) {
+    .hiw-row {
+      grid-template-columns: 1fr;
+      gap: 40px;
+    }
+    .hiw-row--reversed .hiw-text,
+    .hiw-row--reversed .hiw-visual { order: unset; }
+  }
+
   /* Section takes full viewport height, acts as scroll container */
   .st-section {
     height: 100vh;

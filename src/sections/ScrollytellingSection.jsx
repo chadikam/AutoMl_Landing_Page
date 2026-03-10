@@ -1,8 +1,8 @@
-﻿import { useState, useEffect, useRef, useCallback } from 'react';
+﻿import useScrollReveal from '../hooks/useScrollReveal';
 
-/* â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+/* ────────────────────────────────────────────────────────────────
    STEP DATA
-   â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+   ──────────────────────────────────────────────────────────────── */
 const steps = [
   {
     num: '01',
@@ -46,9 +46,9 @@ const steps = [
   },
 ];
 
-/* â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
-   VISUAL PANELS â€” CSS-built mock illustrations
-   â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+/* ────────────────────────────────────────────────────────────────
+   VISUAL PANELS — CSS-built mock illustrations
+   ──────────────────────────────────────────────────────────────── */
 function UploadVisual() {
   return (
     <div className="sv-mock">
@@ -245,227 +245,46 @@ function VisualizeVisual() {
 const VISUALS = { upload: UploadVisual, explore: ExploreVisual, preprocess: PreprocessVisual, train: TrainVisual, visualize: VisualizeVisual };
 
 /* ================================================================
-   MAIN COMPONENT - scroll-hijacking scrollytelling
-   Locks only when the section is FULLY inside the viewport.
-   cooldown drains ALL wheel events during transitions (fixes skip).
-   EXIT_THRESHOLD is higher than STEP_THRESHOLD so trackpad inertia
-   after a step change can't accidentally unlock the section.
+   MAIN COMPONENT — static alternating layout (all steps visible)
    ================================================================ */
 export default function ScrollytellingSection() {
-  const [activeIdx, setActiveIdx] = useState(0);
-  const [locked, setLocked] = useState(false);
-
-  const sectionRef    = useRef(null);
-  const lockedRef     = useRef(false);  // sync mirror of locked state
-  const activeIdxRef  = useRef(0);      // sync mirror of activeIdx state
-  const accum         = useRef(0);
-  const cooldown      = useRef(false);
-  const touchY        = useRef(null);
-  const lastDir       = useRef(0);
-  const unlockGuard   = useRef(false);  // prevents re-lock for 1s after unlock
-
-  const STEP_THRESHOLD = 80;   // delta to advance one step
-  const EXIT_THRESHOLD = 250;  // delta to leave the section (much harder to trip accidentally)
-
-  /* -- helpers -- */
-  const safeSetActive = useCallback((idx) => {
-    activeIdxRef.current = idx;
-    setActiveIdx(idx);
-  }, []);
-
-  const isSectionFullyVisible = useCallback(() => {
-    const el = sectionRef.current;
-    if (!el) return false;
-    const { top, bottom } = el.getBoundingClientRect();
-    return top >= -2 && bottom <= window.innerHeight + 2;
-  }, []);
-
-  /* -- lock / unlock -- */
-  const lockScroll = useCallback(() => {
-    if (lockedRef.current || unlockGuard.current) return;
-    lockedRef.current = true;
-    setLocked(true);
-    document.documentElement.style.overflow = 'hidden';
-  }, []);
-
-  const unlockScroll = useCallback((goingBack) => {
-    if (!lockedRef.current) return;
-    lockedRef.current = false;
-    setLocked(false);
-    document.documentElement.style.overflow = '';
-    accum.current = 0;
-    // guard: prevent re-lock for 1s so the page can scroll away cleanly
-    unlockGuard.current = true;
-    setTimeout(() => { unlockGuard.current = false; }, 1000);
-    if (goingBack) safeSetActive(0);
-  }, [safeSetActive]);
-
-  /* -- scroll listener: lock when section fully enters viewport -- */
-  useEffect(() => {
-    const handleScroll = () => {
-      if (lockedRef.current || unlockGuard.current) return;
-      if (isSectionFullyVisible()) lockScroll();
-    };
-    window.addEventListener('scroll', handleScroll, { passive: true });
-    handleScroll();
-    return () => window.removeEventListener('scroll', handleScroll);
-  }, [isSectionFullyVisible, lockScroll]);
-
-  /* -- wheel handler -- */
-  useEffect(() => {
-    if (!locked) return;
-
-    const handleWheel = (e) => {
-      e.preventDefault();
-
-      // ① Drain ALL events during the inter-step cooldown.
-      //    This is the key fix for bug 1: no accumulation, no advances.
-      if (cooldown.current) return;
-
-      const dir = e.deltaY > 0 ? 1 : -1;
-      if (dir !== lastDir.current) {
-        accum.current = 0;
-        lastDir.current = dir;
-      }
-      accum.current += Math.abs(e.deltaY);
-
-      const curr = activeIdxRef.current;
-      const next = curr + dir;
-
-      // ② At the edges, require EXIT_THRESHOLD before leaving.
-      //    Trackpad inertia (small, decelerating deltas) won't reach it.
-      if (next < 0 || next >= steps.length) {
-        if (accum.current >= EXIT_THRESHOLD) {
-          accum.current = 0;
-          unlockScroll(next < 0);
-        }
-        return;
-      }
-
-      // ③ Normal step advance
-      if (accum.current < STEP_THRESHOLD) return;
-      accum.current = 0;
-      cooldown.current = true;
-      setTimeout(() => { cooldown.current = false; }, 500);
-      safeSetActive(next);
-    };
-
-    window.addEventListener('wheel', handleWheel, { passive: false });
-    return () => window.removeEventListener('wheel', handleWheel);
-  }, [locked, unlockScroll, safeSetActive]);
-
-  /* -- touch handlers (mobile) -- */
-  useEffect(() => {
-    if (!locked) return;
-
-    const handleTouchStart = (e) => {
-      touchY.current = e.touches[0].clientY;
-      accum.current = 0;
-    };
-
-    const handleTouchMove = (e) => {
-      if (touchY.current === null) return;
-      e.preventDefault();
-      const diff = touchY.current - e.touches[0].clientY;
-      const dir = diff > 0 ? 1 : -1;
-
-      if (cooldown.current) return;
-
-      accum.current += Math.abs(diff);
-      touchY.current = e.touches[0].clientY;
-
-      const curr = activeIdxRef.current;
-      const next = curr + dir;
-
-      if (next < 0 || next >= steps.length) {
-        if (accum.current >= EXIT_THRESHOLD) {
-          accum.current = 0;
-          unlockScroll(next < 0);
-        }
-        return;
-      }
-
-      if (accum.current < STEP_THRESHOLD) return;
-      accum.current = 0;
-      cooldown.current = true;
-      setTimeout(() => { cooldown.current = false; }, 500);
-      safeSetActive(next);
-    };
-
-    const handleTouchEnd = () => { touchY.current = null; };
-
-    window.addEventListener('touchstart', handleTouchStart, { passive: true });
-    window.addEventListener('touchmove',  handleTouchMove,  { passive: false });
-    window.addEventListener('touchend',   handleTouchEnd,   { passive: true });
-    return () => {
-      window.removeEventListener('touchstart', handleTouchStart);
-      window.removeEventListener('touchmove',  handleTouchMove);
-      window.removeEventListener('touchend',   handleTouchEnd);
-    };
-  }, [locked, unlockScroll, safeSetActive]);
+  const ref = useScrollReveal();
 
   return (
-    <section id="how-it-works" className="st-section" ref={sectionRef}>
+    <section id="how-it-works" className="hiw-section" ref={ref}>
       <div className="page-container">
-        <div className="st-layout">
-
-        {/* -- LEFT: scrolling step text -- */}
-        <div className="st-text-col">
-          <div className="st-counter" aria-live="polite">
-            <span className="st-counter-current">{String(activeIdx + 1).padStart(2, '0')}</span>
-            <span className="st-counter-sep">/</span>
-            <span>{String(steps.length).padStart(2, '0')}</span>
-          </div>
-
-          <div className="st-steps-track">
-            {steps.map((s, i) => (
-              <div
-                key={s.num}
-                className={`st-step${i === activeIdx ? ' st-step--active' : ''}${i < activeIdx ? ' st-step--past' : ''}`}
-                aria-hidden={i !== activeIdx}
-              >
-                <span className="st-step-bg-num" aria-hidden="true">{s.num}</span>
-                <span className="st-step-label">{s.label}</span>
-                <h3 className="st-step-title">{s.title}</h3>
-                <p className="st-step-desc">{s.desc}</p>
-                <div className="st-step-ingredients">
-                  {s.ingredients.map((ing, j) => (
-                    <span key={j} className="ingredient">
-                      <span className="ingredient-num">{String(j + 1).padStart(2, '0')}</span>{ing}
-                    </span>
-                  ))}
+        <div className="hiw-steps">
+          {steps.map((s, i) => {
+            const V = VISUALS[s.visual];
+            const reversed = i % 2 === 1;
+            return (
+              <div key={s.num} className={`hiw-row reveal${reversed ? ' hiw-row--reversed' : ''}`}>
+                {/* Text */}
+                <div className="hiw-text">
+                  <span className="st-step-bg-num" aria-hidden="true">{s.num}</span>
+                  <span className="st-step-label">{s.label}</span>
+                  <h3 className="st-step-title">{s.title}</h3>
+                  <p className="st-step-desc">{s.desc}</p>
+                  <div className="st-step-ingredients">
+                    {s.ingredients.map((ing, j) => (
+                      <span key={j} className="ingredient">
+                        <span className="ingredient-num">{String(j + 1).padStart(2, '0')}</span>{ing}
+                      </span>
+                    ))}
+                  </div>
+                </div>
+                {/* Visual */}
+                <div className="hiw-visual">
+                  <div className="hiw-visual-frame">
+                    <V />
+                  </div>
                 </div>
               </div>
-            ))}
-          </div>
-
-          {/* Progress dots */}
-          <div className="st-dots" aria-hidden="true">
-            {steps.map((_, i) => (
-              <div
-                key={i}
-                className={`st-dot${i === activeIdx ? ' st-dot--active' : ''}${i < activeIdx ? ' st-dot--past' : ''}`}
-              />
-            ))}
-          </div>
+            );
+          })}
         </div>
-
-        {/* -- RIGHT: fixed visual container -- */}
-        <div className="st-visual-col">
-          <div className="st-visual-frames">
-            {steps.map((s, i) => {
-              const V = VISUALS[s.visual];
-              return (
-                <div key={s.num} className={`st-visual-panel${i === activeIdx ? ' st-visual-panel--active' : ''}`}>
-                  <V />
-                </div>
-              );
-            })}
-          </div>
-        </div>
-
-        </div>{/* st-layout */}
-      </div>{/* page-container */}
+      </div>
     </section>
   );
 }
+
