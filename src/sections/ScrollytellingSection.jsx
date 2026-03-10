@@ -405,7 +405,7 @@ export default function ScrollytellingSection() {
   }, [locked, unlockScroll, safeSetActive]);
 
   return (
-    <section className="st-section" ref={sectionRef}>
+    <section id="how-it-works" className="st-section" ref={sectionRef}>
       <div className="page-container">
         <div className="st-layout">
 

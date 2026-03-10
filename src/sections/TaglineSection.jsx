@@ -4,7 +4,7 @@ export default function TaglineSection() {
   const ref = useScrollReveal();
 
   return (
-    <section className="py-32" ref={ref}>
+    <section id="features" className="py-32" ref={ref}>
       <div className="page-container text-center max-w-4xl mx-auto">
         <h2 className="title-7 text-primary text-balance reveal">
           AutoML doesn&apos;t just train models.<br />
